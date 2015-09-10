@@ -9,6 +9,22 @@ define(
         var cleanup = function (rootEl) {
             $(".removeOnSave", rootEl).remove();
             utils.removeReSpec(rootEl);
+            function attrToDataAttr(name){
+                return function(elem){
+                    var value = elem.getAttribute(name);
+                    elem.removeAttribute(name);
+                    elem.setAttribute("data-" + name, value);
+                }
+            }
+
+            var forList = rootEl.querySelectorAll("[for]");
+            Array.prototype.forEach.call(forList, attrToDataAttr("for"));
+
+            var dfnForList = rootEl.querySelectorAll("[dfn-for]");
+            Array.prototype.forEach.call(dfnForList, attrToDataAttr("dfn-for"));
+
+            var linkForList = rootEl.querySelectorAll("[link-for]");
+            Array.prototype.forEach.call(linkForList, attrToDataAttr("link-for"));
         };
         return {
             show:   function (ui, _conf, _doc, _msg) {
